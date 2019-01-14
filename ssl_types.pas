@@ -86,7 +86,7 @@ type
 
   CRYPTO_EX_DATA = record
     sk : PSTACK;
-    dummy : TC_INT;
+    //dummy : TC_INT;
   end;
 
   PENGINE_CMD_DEFN = ^ENGINE_CMD_DEFN;
@@ -1534,10 +1534,10 @@ type
 
   X509_CINF = record
     version: PASN1_INTEGER;
-    serialNumber: PASN1_INTEGER;
-    signature: PX509_ALGOR;
+    serialNumber: ASN1_INTEGER;
+    signature: X509_ALGOR;
     issuer: PX509_NAME;
-    validity: PX509_VAL;
+    validity: X509_VAL;
     subject: PX509_NAME;
     key: PX509_PUBKEY;
     issuerUID: PASN1_BIT_STRING;
@@ -1559,13 +1559,19 @@ type
   PX509_CERT_AUX = ^X509_CERT_AUX;
   PPX509_CERT_AUX = ^PX509_CERT_AUX;
 
+  X509_SIG_INFO = record
+    mdnid: TC_INT;
+    pknid: TC_INT;
+    secbits: TC_INT;
+    flags: TC_UINT;
+  end;
+
   X509 = record
-    cert_info: PX509_CINF;
-    sig_alg : PX509_ALGOR;
-    signature : PASN1_BIT_STRING;
-    valid : TC_Int;
-    references : TC_Int;
-    name : PAnsiChar;
+    cert_info: X509_CINF;
+    sig_alg : X509_ALGOR;
+    signature : ASN1_BIT_STRING;
+    siginf: X509_SIG_INFO;
+    references : TC_INT;
     ex_data : CRYPTO_EX_DATA;
     ex_pathlen : TC_LONG;
     ex_pcpathlen : TC_LONG;
@@ -1583,6 +1589,8 @@ type
     rfc3779_asid : PASIdentifiers;
     sha1_hash : array [0..SHA_DIGEST_LENGTH-1] of AnsiChar;
     aux : PX509_CERT_AUX;
+//    valid : TC_Int;
+//    name : PAnsiChar;
   end;
 
   X509_CRL_INFO = record

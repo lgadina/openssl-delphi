@@ -19,6 +19,8 @@ uses
   ssl_asn in '..\ssl_asn.pas',
   ssl_bio in '..\ssl_bio.pas',
   ssl_objects in '..\ssl_objects.pas',
+  ssl_bn in '..\ssl_bn.pas',
+  ssl_util in '..\ssl_util.pas',
   ssl_pem in '..\ssl_pem.pas';
 
 function add_ext(cert: PX509; nid: TC_INT; value: PAnsiChar): Boolean;
@@ -72,6 +74,23 @@ begin
   write(c);
 end;
 
+function rand_serial(b: PBIGNUM; ai: PASN1_INTEGER): TC_INT;
+var btmp: PBIGNUM;
+begin
+ if b = nil then
+  btmp := BN_new()
+ else
+  btmp := b;
+
+  Result := BN_rand(btmp, SERIAL_RAND_BITS, BN_RAND_TOP_ANY, BN_RAND_BOTTOM_ANY);
+
+  if Result = 1 then
+    BN_to_ASN1_INTEGER(btmp, ai);
+
+  if btmp <> b then
+     BN_free(btmp);
+end;
+
 procedure mkcert(var x509p: PX509; var pkeyp: PEVP_PKEY; bits: TC_INT; serial: TC_INT; days: TC_INT);
 var FRSA: PRSA;
    name: PX509_NAME;
@@ -94,13 +113,11 @@ begin
   SSL_CheckError;
   X509_set_version(x509p, 2);
   Writeln('Set certificate parameters');
-  ASN1_INTEGER_set(X509_get_serialNumber(x509p), 1);
-  tm := ASN1_TIME_new;
-  ASN1_TIME_set(tm, 0);
-  X509_set_notBefore(x509p,tm);
 
-//  X509_gmtime_adj(x509p.cert_info.validity.notBefore, 0);
-//  X509_gmtime_adj(x509p.cert_info.validity.notAfter, 60*60*24*days);
+  rand_serial(nil, X509_get_serialNumber(x509p));
+
+  X509_gmtime_adj(x509p.cert_info.validity.notBefore, 0);
+  X509_gmtime_adj(x509p.cert_info.validity.notAfter, 60*60*24*days);
   X509_set_pubkey(x509p, pkeyp);
   Name := X509_get_subject_name(x509p);
   X509_NAME_add_entry_by_txt(Name, 'C', MBSTRING_ASC, 'RU', -1, -1, 0);
@@ -135,6 +152,7 @@ begin
     SSL_InitBIO;
     SSL_InitASN1;
     SSL_InitPEM;
+    SSL_InitBN;
 
     mkcert(FX509, FKey, 2048, 1, 365);
 

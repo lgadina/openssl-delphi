@@ -5796,6 +5796,15 @@ const
   SSL_MAX_KEY_ARG_LENGTH			= 8;
   SSL_MAX_MASTER_KEY_LENGTH		= 48;
 
+  SERIAL_RAND_BITS = 159;
+
+  BN_RAND_TOP_ANY    = -1;
+  BN_RAND_TOP_ONE    = 0;
+  BN_RAND_TOP_TWO    = 1;
+
+  BN_RAND_BOTTOM_ANY  = 0;
+  BN_RAND_BOTTOM_ODD  = 1;
+
 
 implementation
 end.
