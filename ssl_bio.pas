@@ -2,7 +2,7 @@
 unit ssl_bio;
 
 interface
-uses {$IFDEF UNIX}cNetDB{$ELSE}winapi.winsock2{$ENDIF}, ssl_types;
+uses {$IFDEF UNIX}cNetDB{$ELSE}winsock2{$ENDIF}, ssl_types;
 
 
 var
@@ -149,7 +149,7 @@ begin
   if @BIO_new = nil then
   begin
     @BIO_new := LoadFunctionCLib('BIO_new');
-    @BIO_set := LoadFunctionCLib('BIO_set');
+    @BIO_set := LoadFunctionCLib('BIO_set', false);
     @BIO_free:= LoadFunctionCLib('BIO_free');
     @BIO_vfree:= LoadFunctionCLib('BIO_vfree');
     @BIO_read:= LoadFunctionCLib('BIO_read');
@@ -194,7 +194,7 @@ begin
     @BIO_get_accept_socket:= LoadFunctionCLib('BIO_get_accept_socket');
     @BIO_accept:= LoadFunctionCLib('BIO_accept');
     @BIO_sock_init:= LoadFunctionCLib('BIO_sock_init');
-    @BIO_sock_cleanup:= LoadFunctionCLib('BIO_sock_cleanup');
+    @BIO_sock_cleanup:= LoadFunctionCLib('BIO_sock_cleanup', false);
     @BIO_set_tcp_ndelay:= LoadFunctionCLib('BIO_set_tcp_ndelay');
     @BIO_asn1_set_prefix:= LoadFunctionCLib('BIO_asn1_set_prefix', false);
     @BIO_asn1_get_prefix:= LoadFunctionCLib('BIO_asn1_get_prefix', false);
@@ -227,7 +227,7 @@ begin
     @BIO_get_callback:= LoadFunctionCLib('BIO_get_callback');
     @BIO_get_callback_arg:= LoadFunctionCLib('BIO_get_callback_arg');
     @BIO_get_ex_data:= LoadFunctionCLib('BIO_get_ex_data');
-    @BIO_get_ex_new_index:= LoadFunctionCLib('BIO_get_ex_new_index');
+    @BIO_get_ex_new_index:= LoadFunctionCLib('BIO_get_ex_new_index', false);
     @BIO_gethostbyname:= LoadFunctionCLib('BIO_gethostbyname');
     @BIO_method_name:= LoadFunctionCLib('BIO_method_name');
     @BIO_method_type:= LoadFunctionCLib('BIO_method_type');
@@ -298,4 +298,4 @@ begin
   Result := BIO_ctrl(b, BIO_C_SET_FILENAME, BIO_CLOSE or BIO_FP_READ, Name);
 end;
 
-end.
+end.

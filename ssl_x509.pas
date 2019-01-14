@@ -16,10 +16,13 @@ var
     const bytes: PAnsiChar; len: TC_INT; loc: TC_INT; _set: TC_Int): TC_Int cdecl = nil;
   X509_INFO_free : procedure (a : PX509_INFO) cdecl = nil;
   X509_set_version : function(x: PX509; version: TC_LONG): TC_Int cdecl = nil;
+  X509_get_version: function(x: PX509): TC_LONG; cdecl;
   X509_get_serialNumber : function(x: PX509): PASN1_INTEGER cdecl = nil;
   X509_gmtime_adj : function(s: PASN1_TIME; adj: TC_LONG): PASN1_TIME cdecl = nil;
   X509_set_notBefore : function(x: PX509; tm: PASN1_TIME): TC_Int cdecl = nil;
   X509_set_notAfter : function(x: PX509; tm: PASN1_TIME): TC_Int cdecl = nil;
+  X509_get_notBefore: function(x: PX509): PASN1_TIME; cdecl = nil;
+  X509_get_notAfter: function(x: PX509): PASN1_TIME; cdecl = nil;
   X509_set_pubkey : function(x: PX509; pkey: PEVP_PKEY): TC_Int cdecl = nil;
   X509_REQ_set_pubkey : function(x: PX509_REQ; pkey: PEVP_PKEY): TC_Int cdecl = nil;
   X509_sign : function(x: PX509; pkey: PEVP_PKEY; const md: PEVP_MD): TC_Int cdecl = nil;
@@ -745,10 +748,27 @@ begin
     @X509_NAME_add_entry_by_txt := LoadFunctionCLib('X509_NAME_add_entry_by_txt');
     @X509_INFO_free := LoadFunctionCLib('X509_INFO_free');
     @X509_set_version := LoadFunctionCLib('X509_set_version');
+    @X509_get_version := LoadFunctionCLib('X509_get_version', false);
     @X509_get_serialNumber := LoadFunctionCLib('X509_get_serialNumber');
     @X509_gmtime_adj := LoadFunctionCLib('X509_gmtime_adj');
-    @X509_set_notBefore := LoadFunctionCLib('X509_set_notBefore');
-    @X509_set_notAfter := LoadFunctionCLib('X509_set_notAfter');
+
+    @X509_set_notBefore := LoadFunctionCLib('X509_set_notBefore', false);
+    if not Assigned(X509_set_notBefore) then
+     @X509_set_notBefore := LoadFunctionCLib('X509_set1_notBefore');
+
+    @X509_set_notAfter := LoadFunctionCLib('X509_set_notAfter', false);
+    if not Assigned(X509_set_notAfter) then
+     @X509_set_notAfter := LoadFunctionCLib('X509_set1_notAfter');
+
+    @X509_get_notAfter := LoadFunctionCLib('X509_get_notAfter', false);
+    if not Assigned(X509_get_notAfter) then
+     @X509_get_notAfter := LoadFunctionCLib('X509_getm_notAfter', false);
+
+     @X509_get_notBefore := LoadFunctionCLib('X509_get_notBefore', false);
+     if not Assigned(X509_get_notBefore) then
+      @X509_get_notBefore := LoadFunctionCLib('X509_getm_notBefore', false);
+
+
     @X509_set_pubkey := LoadFunctionCLib('X509_set_pubkey');
     @X509_REQ_set_pubkey := LoadFunctionCLib('X509_REQ_set_pubkey');
     @X509_sign := LoadFunctionCLib('X509_sign');
@@ -863,7 +883,7 @@ begin
     @i2d_EC_PUBKEY:= LoadFunctionCLib('i2d_EC_PUBKEY');
     @d2i_EC_PUBKEY:= LoadFunctionCLib('d2i_EC_PUBKEY');
     @X509_NAME_set:= LoadFunctionCLib('X509_NAME_set');
-    @X509_get_ex_new_index:= LoadFunctionCLib('X509_get_ex_new_index');
+    @X509_get_ex_new_index:= LoadFunctionCLib('X509_get_ex_new_index', false);
     @X509_set_ex_data:= LoadFunctionCLib('X509_set_ex_data');
     @X509_get_ex_data:= LoadFunctionCLib('X509_get_ex_data');
     @i2d_X509_AUX:= LoadFunctionCLib('i2d_X509_AUX');
@@ -882,8 +902,8 @@ begin
     @X509_CRL_get0_by_cert:= LoadFunctionCLib('X509_CRL_get0_by_cert');
     @X509_PKEY_new:= LoadFunctionCLib('X509_PKEY_new');
     @X509_PKEY_free:= LoadFunctionCLib('X509_PKEY_free');
-    @i2d_X509_PKEY:= LoadFunctionCLib('i2d_X509_PKEY');
-    @d2i_X509_PKEY:= LoadFunctionCLib('d2i_X509_PKEY');
+    @i2d_X509_PKEY:= LoadFunctionCLib('i2d_X509_PKEY', false);
+    @d2i_X509_PKEY:= LoadFunctionCLib('d2i_X509_PKEY', false);
     @X509_INFO_new:= LoadFunctionCLib('X509_INFO_new');
     @X509_INFO_free:= LoadFunctionCLib('X509_INFO_free');
     @X509_NAME_oneline:= LoadFunctionCLib('X509_NAME_oneline');
@@ -901,8 +921,6 @@ begin
     @X509_get_issuer_name:= LoadFunctionCLib('X509_get_issuer_name');
     @X509_set_subject_name:= LoadFunctionCLib('X509_set_subject_name');
     @X509_get_subject_name:= LoadFunctionCLib('X509_get_subject_name');
-    @X509_set_notBefore:= LoadFunctionCLib('X509_set_notBefore');
-    @X509_set_notAfter:= LoadFunctionCLib('X509_set_notAfter');
     @X509_set_pubkey:= LoadFunctionCLib('X509_set_pubkey');
     @X509_get_pubkey:= LoadFunctionCLib('X509_get_pubkey');
     @X509_get0_pubkey_bitstr:= LoadFunctionCLib('X509_get0_pubkey_bitstr');
@@ -928,8 +946,8 @@ begin
     @X509_REQ_add1_attr_by_txt:= LoadFunctionCLib('X509_REQ_add1_attr_by_txt');
     @X509_CRL_set_version:= LoadFunctionCLib('X509_CRL_set_version');
     @X509_CRL_set_issuer_name:= LoadFunctionCLib('X509_CRL_set_issuer_name');
-    @X509_CRL_set_lastUpdate:= LoadFunctionCLib('X509_CRL_set_lastUpdate');
-    @X509_CRL_set_nextUpdate:= LoadFunctionCLib('X509_CRL_set_nextUpdate');
+    @X509_CRL_set_lastUpdate:= LoadFunctionCLib('X509_CRL_set_lastUpdate', false);
+    @X509_CRL_set_nextUpdate:= LoadFunctionCLib('X509_CRL_set_nextUpdate', false);
     @X509_CRL_sort:= LoadFunctionCLib('X509_CRL_sort');
     @X509_REVOKED_set_serialNumber:= LoadFunctionCLib('X509_REVOKED_set_serialNumber');
     @X509_REVOKED_set_revocationDate:= LoadFunctionCLib('X509_REVOKED_set_revocationDate');
@@ -954,7 +972,7 @@ begin
     @X509_print_ex:= LoadFunctionCLib('X509_print_ex');
     @X509_print:= LoadFunctionCLib('X509_print');
     @X509_ocspid_print:= LoadFunctionCLib('X509_ocspid_print');
-    @X509_CERT_AUX_print:= LoadFunctionCLib('X509_CERT_AUX_print');
+    @X509_CERT_AUX_print:= LoadFunctionCLib('X509_CERT_AUX_print', false);
     @X509_CRL_print:= LoadFunctionCLib('X509_CRL_print');
     @X509_REQ_print_ex:= LoadFunctionCLib('X509_REQ_print_ex');
     @X509_REQ_print:= LoadFunctionCLib('X509_REQ_print');
@@ -1056,8 +1074,8 @@ begin
     @PKCS5_pbkdf2_set:= LoadFunctionCLib('PKCS5_pbkdf2_set');
     @EVP_PKCS82PKEY:= LoadFunctionCLib('EVP_PKCS82PKEY');
     @EVP_PKEY2PKCS8:= LoadFunctionCLib('EVP_PKEY2PKCS8');
-    @EVP_PKEY2PKCS8_broken:= LoadFunctionCLib('EVP_PKEY2PKCS8_broken');
-    @PKCS8_set_broken:= LoadFunctionCLib('PKCS8_set_broken');
+    @EVP_PKEY2PKCS8_broken:= LoadFunctionCLib('EVP_PKEY2PKCS8_broken', false);
+    @PKCS8_set_broken:= LoadFunctionCLib('PKCS8_set_broken', false);
     @PKCS8_pkey_set0:= LoadFunctionCLib('PKCS8_pkey_set0');
     @PKCS8_pkey_get0:= LoadFunctionCLib('PKCS8_pkey_get0');
     @X509_PUBKEY_set0_param:= LoadFunctionCLib('X509_PUBKEY_set0_param');
@@ -1124,11 +1142,11 @@ begin
     @d2i_X509_CERT_AUX:= LoadFunctionCLib('d2i_X509_CERT_AUX');
     @i2d_X509_CERT_AUX:= LoadFunctionCLib('i2d_X509_CERT_AUX');
     @X509_CERT_AUX_it:= LoadFunctionCLib('X509_CERT_AUX_it');
-    @X509_CERT_PAIR_new:= LoadFunctionCLib('X509_CERT_PAIR_new');
-    @X509_CERT_PAIR_free:= LoadFunctionCLib('X509_CERT_PAIR_free');
-    @d2i_X509_CERT_PAIR:= LoadFunctionCLib('d2i_X509_CERT_PAIR');
-    @i2d_X509_CERT_PAIR:= LoadFunctionCLib('i2d_X509_CERT_PAIR');
-    @X509_CERT_PAIR_it:= LoadFunctionCLib('X509_CERT_PAIR_it');
+    @X509_CERT_PAIR_new:= LoadFunctionCLib('X509_CERT_PAIR_new', false);
+    @X509_CERT_PAIR_free:= LoadFunctionCLib('X509_CERT_PAIR_free', false);
+    @d2i_X509_CERT_PAIR:= LoadFunctionCLib('d2i_X509_CERT_PAIR', false);
+    @i2d_X509_CERT_PAIR:= LoadFunctionCLib('i2d_X509_CERT_PAIR', false);
+    @X509_CERT_PAIR_it:= LoadFunctionCLib('X509_CERT_PAIR_it', false);
     @X509_REVOKED_new:= LoadFunctionCLib('X509_REVOKED_new');
     @X509_REVOKED_free:= LoadFunctionCLib('X509_REVOKED_free');
     @d2i_X509_REVOKED:= LoadFunctionCLib('d2i_X509_REVOKED');
@@ -1346,9 +1364,11 @@ begin
      
    @X509V3_EXT_i2d:= LoadFunctionCLib('X509V3_EXT_i2d');
    @X509V3_add1_i2d:= LoadFunctionCLib('X509V3_add1_i2d');
-   @hex_to_string:= LoadFunctionCLib('hex_to_string');
-   @string_to_hex:= LoadFunctionCLib('string_to_hex');
-   @name_cmp:= LoadFunctionCLib('name_cmp');
+
+   @hex_to_string:= LoadFunctionCLib('hex_to_string', false);
+   @string_to_hex:= LoadFunctionCLib('string_to_hex', false);
+   @name_cmp:= LoadFunctionCLib('name_cmp', false);
+
    @X509V3_EXT_val_prn:= LoadFunctionCLib('X509V3_EXT_val_prn');
    @X509V3_EXT_print:= LoadFunctionCLib('X509V3_EXT_print');
 
@@ -1378,7 +1398,8 @@ begin
 
    @a2i_IPADDRESS:= LoadFunctionCLib('a2i_IPADDRESS');
    @a2i_IPADDRESS_NC:= LoadFunctionCLib('a2i_IPADDRESS_NC');
-   @a2i_ipadd:= LoadFunctionCLib('a2i_ipadd');
+   @a2i_ipadd:= LoadFunctionCLib('a2i_ipadd', false);
+
    @X509V3_NAME_from_section:= LoadFunctionCLib('X509V3_NAME_from_section');
 
    @X509_POLICY_NODE_print:= LoadFunctionCLib('X509_POLICY_NODE_print');
@@ -1390,4 +1411,4 @@ begin
 
   end;
 end;
-end.
+end.

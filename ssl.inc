@@ -1,0 +1,6 @@
+{$DEFINE AES_LONG}
+
+{$IFDEF FPC}
+ {$MODE DELPHI}
+{$ENDIF}
+

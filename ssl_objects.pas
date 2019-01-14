@@ -76,7 +76,7 @@ begin
     @OBJ_new_nid:= LoadFunctionCLib('OBJ_new_nid');
     @OBJ_add_object:= LoadFunctionCLib('OBJ_add_object');
     @OBJ_create:= LoadFunctionCLib('OBJ_create');
-    @OBJ_cleanup:= LoadFunctionCLib('OBJ_cleanup');
+    @OBJ_cleanup:= LoadFunctionCLib('OBJ_cleanup', false);
     @OBJ_create_objects:= LoadFunctionCLib('OBJ_create_objects');
     @OBJ_find_sigid_algs:= LoadFunctionCLib('OBJ_find_sigid_algs', false);
     @OBJ_find_sigid_by_algs:= LoadFunctionCLib('OBJ_find_sigid_by_algs', false);
@@ -88,4 +88,4 @@ begin
  end;
 end;
 
-end.
+end.

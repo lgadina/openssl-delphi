@@ -131,7 +131,7 @@ begin
     @CONF_dump_bio:= LoadFunctionCLib('CONF_dump_bio');
 
     @OPENSSL_config:= LoadFunctionCLib('OPENSSL_config');
-    @OPENSSL_no_config:= LoadFunctionCLib('OPENSSL_no_config');
+    @OPENSSL_no_config:= LoadFunctionCLib('OPENSSL_no_config', false);
 
     @NCONF_new:= LoadFunctionCLib('NCONF_new');
     @NCONF_default:= LoadFunctionCLib('NCONF_default');
@@ -152,7 +152,7 @@ begin
     @CONF_modules_load_file:= LoadFunctionCLib('CONF_modules_load_file');
     @CONF_modules_unload:= LoadFunctionCLib('CONF_modules_unload');
     @CONF_modules_finish:= LoadFunctionCLib('CONF_modules_finish');
-    @CONF_modules_free:= LoadFunctionCLib('CONF_modules_free');
+    @CONF_modules_free:= LoadFunctionCLib('CONF_modules_free', false);
     @CONF_module_add:= LoadFunctionCLib('CONF_module_add');
 
     @CONF_imodule_get_name:= LoadFunctionCLib('CONF_imodule_get_name');
@@ -174,4 +174,4 @@ begin
     @ERR_load_CONF_strings:= LoadFunctionCLib('ERR_load_CONF_strings');
    end;
 end;
-end.
+end.

@@ -3,7 +3,7 @@
 unit ssl_types;
 
 interface
-uses {$IFDEF UNIX}BaseUnix {$ELSE} Winapi.Windows{$ENDIF}
+uses {$IFDEF UNIX}BaseUnix {$ELSE}Windows{$ENDIF}
     , ssl_const;
 
 type
@@ -1176,11 +1176,11 @@ type
       pkey: PEVP_PKEY;
       peerkey: PEVP_PKEY;
       operation: TC_INT;
-    data: Pointer;
+      data: Pointer;
       app_data: Pointer;
       pkey_gencb: EVP_PKEY_gen_cb;
       keygen_info: PC_INT;
-    keygen_info_count: TC_INT;
+      keygen_info_count: TC_INT;
     end;
 
     EVP_PKEY_METHOD = record
@@ -1358,10 +1358,10 @@ type
     _final : function (ctx : PEVP_MD_CTX; md : PAnsiChar) : TC_Int; cdecl;
     copy : function (_to : PEVP_MD_CTX; from : PEVP_MD_CTX ) : TC_Int; cdecl;
     cleanup : function(ctx : PEVP_MD_CTX) : TC_Int; cdecl;
-    sign : function(_type : TC_Int; m : PAnsiChar; m_length : TC_UINT;  sigret : PAnsiChar; siglen : TC_UINT; key : Pointer) : TC_Int; cdecl;
-    verify : function(_type : TC_Int; m : PAnsiChar; m_length : PAnsiChar;  sigbuf : PAnsiChar; siglen : TC_UINT; key : Pointer) : TC_Int; cdecl;
-    required_pkey_type : array [0..4] of TC_Int; // EVP_PKEY_xxx
-    block_size : TC_Int;
+    //sign : function(_type : TC_Int; m : PAnsiChar; m_length : TC_UINT;  sigret : PAnsiChar; siglen : TC_UINT; key : Pointer) : TC_Int; cdecl;
+    //verify : function(_type : TC_Int; m : PAnsiChar; m_length : PAnsiChar;  sigbuf : PAnsiChar; siglen : TC_UINT; key : Pointer) : TC_Int; cdecl;
+    //required_pkey_type : array [0..4] of TC_Int; // EVP_PKEY_xxx
+    block_size : TC_ULONG;
     ctx_size : TC_Int;
     md_ctrl: function( ctx: PEVP_MD_CTX; cmd: TC_INT; p1: TC_INT; p2: Pointer): TC_INT; cdecl;
   end;
@@ -2149,7 +2149,7 @@ type
 
 {$REGION 'PEM'}
 
-    pem_password_cb = function(buf: PAnsiString; size: TC_INT; rwflag: TC_INT; userdata: pointer): integer; cdecl;
+    pem_password_cb = function(buf: PAnsiChar; size: TC_INT; rwflag: TC_INT; userdata: pointer): integer; cdecl;
 
 {$ENDREGION}
 
@@ -3573,4 +3573,4 @@ type
 {$ENDREGION}
 implementation
 
-end.
+end.

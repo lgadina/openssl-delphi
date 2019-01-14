@@ -37,8 +37,8 @@ var
 
   EVP_MD_CTX_init: procedure(ctx: PEVP_MD_CTX); cdecl = nil;
   EVP_MD_CTX_cleanup: function(ctx: PEVP_MD_CTX): TC_INT; cdecl = nil;
-  EVP_MD_CTX_create: function: PEVP_MD_CTX; cdecl = nil;
-  EVP_MD_CTX_destroy: procedure(ctx: PEVP_MD_CTX); cdecl = nil;
+  EVP_MD_CTX_new: function: PEVP_MD_CTX; cdecl = nil;
+  EVP_MD_CTX_free: procedure(ctx: PEVP_MD_CTX); cdecl = nil;
 
   EVP_MD_CTX_copy_ex: function(_out: EVP_MD_CTX;const _in: EVP_MD_CTX): TC_INT; cdecl = nil;
   EVP_MD_CTX_set_flags: procedure(ctx: PEVP_MD_CTX; flags: TC_INT); cdecl = nil;
@@ -295,12 +295,12 @@ var
   EVP_PKEY_new: function: PEVP_PKEY; cdecl = nil;
   EVP_PKEY_free: procedure(pkey: PEVP_PKEY); cdecl = nil;
 
-  d2i_PublicKey: function(_type: TC_INT; a: PPEVP_PKEY; pp: PPAnsiChar; _length: TC_LONG): PEVP_PKEY; cdecl = nil;
-  i2d_PublicKey: function(a: PEVP_PKEY; pp: PPAnsiChar): TC_INT; cdecl = nil;
+  d2i_PublicKey: function(_type: TC_INT; a: PPEVP_PKEY; var pp: PAnsiChar; _length: TC_LONG): PEVP_PKEY; cdecl = nil;
+  i2d_PublicKey: function(a: PEVP_PKEY; var pp: PAnsiChar): TC_INT; cdecl = nil;
 
-  d2i_PrivateKey: function(_type: TC_INT; a: PPEVP_PKEY; pp: PPAnsiChar;   _length: TC_LONG): PEVP_PKEY; cdecl = nil;
-  d2i_AutoPrivateKey: function(a: PPEVP_PKEY; pp: PPAnsiChar; _length: TC_LONG): PEVP_PKEY; cdecl = nil;
-  i2d_PrivateKey: function(a: PEVP_PKEY; pp: PPAnsiChar): TC_INT; cdecl = nil;
+  d2i_PrivateKey: function(_type: TC_INT; a: PPEVP_PKEY; var pp: PAnsiChar; _length: TC_LONG): PEVP_PKEY; cdecl = nil;
+  d2i_AutoPrivateKey: function(a: PPEVP_PKEY; var pp: PAnsiChar; _length: TC_LONG): PEVP_PKEY; cdecl = nil;
+  i2d_PrivateKey: function(a: PEVP_PKEY; var pp: PAnsiChar): TC_INT; cdecl = nil;
 
   EVP_PKEY_copy_parameters: function(_to: PEVP_PKEY; const _from: PEVP_PKEY): TC_INT; cdecl = nil;
   EVP_PKEY_missing_parameters: function(const pkey: PEVP_PKEY): TC_INT; cdecl = nil;
@@ -524,7 +524,10 @@ end;
 
 function EVP_CIPHER_CTX_mode(e: PEVP_CIPHER_CTX): TC_ULONG; inline;
 begin
-  Result := EVP_CIPHER_CTX_flags(e) and EVP_CIPH_MODE;
+ if Assigned(EVP_CIPHER_CTX_flags) then
+   Result := EVP_CIPHER_CTX_flags(e) and EVP_CIPH_MODE
+ else
+   Result := 0;
 end;
 
 function EVP_ENCODE_LENGTH(l: TC_INT): TC_INT; inline;
@@ -611,17 +614,21 @@ begin
      @EVP_CIPHER_CTX_copy:= LoadFunctionCLib('EVP_CIPHER_CTX_copy', false);
      @EVP_CIPHER_CTX_get_app_data:= LoadFunctionCLib('EVP_CIPHER_CTX_get_app_data');
      @EVP_CIPHER_CTX_set_app_data:= LoadFunctionCLib('EVP_CIPHER_CTX_set_app_data');
-     @EVP_CIPHER_CTX_flags:= LoadFunctionCLib('EVP_CIPHER_CTX_flags');
+     @EVP_CIPHER_CTX_flags:= LoadFunctionCLib('EVP_CIPHER_CTX_flags', false);
      @BIO_set_md:= LoadFunctionCLib('BIO_set_md', false);
      @EVP_Cipher:= LoadFunctionCLib('EVP_Cipher');
-     @EVP_MD_CTX_init:= LoadFunctionCLib('EVP_MD_CTX_init');
-     @EVP_MD_CTX_cleanup:= LoadFunctionCLib('EVP_MD_CTX_cleanup');
-     @EVP_MD_CTX_create:= LoadFunctionCLib('EVP_MD_CTX_create');
-     @EVP_MD_CTX_destroy:= LoadFunctionCLib('EVP_MD_CTX_destroy');
-     @EVP_MD_CTX_copy_ex:= LoadFunctionCLib('EVP_MD_CTX_copy_ex');
-     @EVP_MD_CTX_set_flags:= LoadFunctionCLib('EVP_MD_CTX_set_flags');
-     @EVP_MD_CTX_clear_flags:= LoadFunctionCLib('EVP_MD_CTX_clear_flags');
-     @EVP_MD_CTX_test_flags:= LoadFunctionCLib('EVP_MD_CTX_test_flags');
+     @EVP_MD_CTX_init:= LoadFunctionCLib('EVP_MD_CTX_init', false);
+     @EVP_MD_CTX_cleanup:= LoadFunctionCLib('EVP_MD_CTX_cleanup', false);
+     @EVP_MD_CTX_new:= LoadFunctionCLib('EVP_MD_CTX_new', false);
+     if @EVP_MD_CTX_new = nil then
+      @EVP_MD_CTX_new:= LoadFunctionCLib('EVP_MD_CTX_create', false);
+     @EVP_MD_CTX_free:= LoadFunctionCLib('EVP_MD_CTX_free', false);
+     if @EVP_MD_CTX_free = nil then
+      @EVP_MD_CTX_free:= LoadFunctionCLib('EVP_MD_CTX_destroy');
+     @EVP_MD_CTX_copy_ex:= LoadFunctionCLib('EVP_MD_CTX_copy_ex', false);
+     @EVP_MD_CTX_set_flags:= LoadFunctionCLib('EVP_MD_CTX_set_flags', false);
+     @EVP_MD_CTX_clear_flags:= LoadFunctionCLib('EVP_MD_CTX_clear_flags', false);
+     @EVP_MD_CTX_test_flags:= LoadFunctionCLib('EVP_MD_CTX_test_flags', false);
      @EVP_DigestInit_ex:= LoadFunctionCLib('EVP_DigestInit_ex');
      @EVP_DigestUpdate:= LoadFunctionCLib('EVP_DigestUpdate');
      @EVP_DigestFinal_ex:= LoadFunctionCLib('EVP_DigestFinal_ex');
@@ -670,10 +677,10 @@ begin
      @EVP_DecodeUpdate:= LoadFunctionCLib('EVP_DecodeUpdate');
      @EVP_DecodeFinal:= LoadFunctionCLib('EVP_DecodeFinal');
      @EVP_DecodeBlock:= LoadFunctionCLib('EVP_DecodeBlock');
-     @EVP_CIPHER_CTX_init:= LoadFunctionCLib('EVP_CIPHER_CTX_init');
+     @EVP_CIPHER_CTX_init:= LoadFunctionCLib('EVP_CIPHER_CTX_init', false);
      @EVP_CIPHER_CTX_free:= LoadFunctionCLib('EVP_CIPHER_CTX_free');
      @EVP_CIPHER_CTX_new:= LoadFunctionCLib('EVP_CIPHER_CTX_new');
-     @EVP_CIPHER_CTX_cleanup:= LoadFunctionCLib('EVP_CIPHER_CTX_cleanup');
+     @EVP_CIPHER_CTX_cleanup:= LoadFunctionCLib('EVP_CIPHER_CTX_cleanup', false);
      @EVP_CIPHER_CTX_set_key_length:= LoadFunctionCLib('EVP_CIPHER_CTX_set_key_length');
      @EVP_CIPHER_CTX_set_padding:= LoadFunctionCLib('EVP_CIPHER_CTX_set_padding');
      @EVP_CIPHER_CTX_ctrl:= LoadFunctionCLib('EVP_CIPHER_CTX_ctrl');
@@ -687,11 +694,11 @@ begin
      @EVP_md2:= LoadFunctionCLib('EVP_md2', false);
      @EVP_md4:= LoadFunctionCLib('EVP_md4');
      @EVP_md5:= LoadFunctionCLib('EVP_md5');
-     @EVP_sha:= LoadFunctionCLib('EVP_sha');
+     @EVP_sha:= LoadFunctionCLib('EVP_sha', false);
      @EVP_sha1:= LoadFunctionCLib('EVP_sha1');
-     @EVP_dss:= LoadFunctionCLib('EVP_dss');
-     @EVP_dss1:= LoadFunctionCLib('EVP_dss1');
-     @EVP_ecdsa:= LoadFunctionCLib('EVP_ecdsa');
+     @EVP_dss:= LoadFunctionCLib('EVP_dss', false);
+     @EVP_dss1:= LoadFunctionCLib('EVP_dss1', false);
+     @EVP_ecdsa:= LoadFunctionCLib('EVP_ecdsa', false);
      @EVP_sha224:= LoadFunctionCLib('EVP_sha224');
      @EVP_sha256:= LoadFunctionCLib('EVP_sha256');
      @EVP_sha384:= LoadFunctionCLib('EVP_sha384');
@@ -802,15 +809,17 @@ begin
      @EVP_seed_cbc:= LoadFunctionCLib('EVP_seed_cbc', false);
      @EVP_seed_cfb128:= LoadFunctionCLib('EVP_seed_cfb128', false);
      @EVP_seed_ofb:= LoadFunctionCLib('EVP_seed_ofb', false);
-     @OPENSSL_add_all_algorithms_noconf:= LoadFunctionCLib('OPENSSL_add_all_algorithms_noconf');
-     @OPENSSL_add_all_algorithms_conf:= LoadFunctionCLib('OPENSSL_add_all_algorithms_conf');
-     @OpenSSL_add_all_ciphers:= LoadFunctionCLib('OpenSSL_add_all_ciphers');
-     @OpenSSL_add_all_digests:= LoadFunctionCLib('OpenSSL_add_all_digests');
+
+     @OPENSSL_add_all_algorithms_noconf:= LoadFunctionCLib('OPENSSL_add_all_algorithms_noconf', false);
+     @OPENSSL_add_all_algorithms_conf:= LoadFunctionCLib('OPENSSL_add_all_algorithms_conf', false);
+     @OpenSSL_add_all_ciphers:= LoadFunctionCLib('OpenSSL_add_all_ciphers', false);
+     @OpenSSL_add_all_digests:= LoadFunctionCLib('OpenSSL_add_all_digests', false);
+
      @EVP_add_cipher:= LoadFunctionCLib('EVP_add_cipher');
      @EVP_add_digest:= LoadFunctionCLib('EVP_add_digest');
      @EVP_get_cipherbyname:= LoadFunctionCLib('EVP_get_cipherbyname');
      @EVP_get_digestbyname:= LoadFunctionCLib('EVP_get_digestbyname');
-     @EVP_cleanup:= LoadFunctionCLib('EVP_cleanup');
+     @EVP_cleanup:= LoadFunctionCLib('EVP_cleanup', false);
      @EVP_CIPHER_do_all:= LoadFunctionCLib('EVP_CIPHER_do_all', false);
      @EVP_CIPHER_do_all_sorted:= LoadFunctionCLib('EVP_CIPHER_do_all_sorted', false);
      @EVP_MD_do_all:= LoadFunctionCLib('EVP_MD_do_all', false);
@@ -928,4 +937,4 @@ begin
   end;
 end;
 
-end.
+end.

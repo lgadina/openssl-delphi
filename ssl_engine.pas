@@ -192,8 +192,8 @@ begin
      @ENGINE_add:= LoadFunctionCLib('ENGINE_add');
      @ENGINE_remove:= LoadFunctionCLib('ENGINE_remove');
      @ENGINE_by_id:= LoadFunctionCLib('ENGINE_by_id');
-     @ENGINE_load_openssl := LoadFunctionCLib('ENGINE_load_openssl');
-     @ENGINE_load_dynamic:= LoadFunctionCLib('ENGINE_load_dynamic');
+     @ENGINE_load_openssl := LoadFunctionCLib('ENGINE_load_openssl', false);
+     @ENGINE_load_dynamic:= LoadFunctionCLib('ENGINE_load_dynamic', false);
      @ENGINE_load_4758cca:= LoadFunctionCLib('ENGINE_load_4758cca', false);
      @ENGINE_load_aep:= LoadFunctionCLib('ENGINE_load_aep', false);
      @ENGINE_load_atalla:= LoadFunctionCLib('ENGINE_load_atalla', false);
@@ -206,9 +206,9 @@ begin
      @ENGINE_load_capi:= LoadFunctionCLib('ENGINE_load_capi', false);
      @ENGINE_load_gmp:= LoadFunctionCLib('ENGINE_load_gmp', false);
      @ENGINE_load_gost:= LoadFunctionCLib('ENGINE_load_gost', false);
-     @ENGINE_load_cryptodev:= LoadFunctionCLib('ENGINE_load_cryptodev');
-     @ENGINE_load_rsax:= LoadFunctionCLib('ENGINE_load_rsax');
-     @ENGINE_load_rdrand:= LoadFunctionCLib('ENGINE_load_rdrand');
+     @ENGINE_load_cryptodev:= LoadFunctionCLib('ENGINE_load_cryptodev', false);
+     @ENGINE_load_rsax:= LoadFunctionCLib('ENGINE_load_rsax', false);
+     @ENGINE_load_rdrand:= LoadFunctionCLib('ENGINE_load_rdrand', false);
      @ENGINE_load_builtin_engines:= LoadFunctionCLib('ENGINE_load_builtin_engines');
      @ENGINE_get_table_flags:= LoadFunctionCLib('ENGINE_get_table_flags');
      @ENGINE_set_table_flags:= LoadFunctionCLib('ENGINE_set_table_flags');
@@ -218,21 +218,21 @@ begin
      @ENGINE_register_DSA:= LoadFunctionCLib('ENGINE_register_DSA');
      @ENGINE_unregister_DSA:= LoadFunctionCLib('ENGINE_unregister_DSA');
      @ENGINE_register_all_DSA:= LoadFunctionCLib('ENGINE_register_all_DSA');
-     @ENGINE_register_ECDH:= LoadFunctionCLib('ENGINE_register_ECDH');
-     @ENGINE_unregister_ECDH:= LoadFunctionCLib('ENGINE_unregister_ECDH');
-     @ENGINE_register_all_ECDH:= LoadFunctionCLib('ENGINE_register_all_ECDH');
-     @ENGINE_register_ECDSA:= LoadFunctionCLib('ENGINE_register_ECDSA');
-     @ENGINE_unregister_ECDSA:= LoadFunctionCLib('ENGINE_unregister_ECDSA');
-     @ENGINE_register_all_ECDSA:= LoadFunctionCLib('ENGINE_register_all_ECDSA');
+     @ENGINE_register_ECDH:= LoadFunctionCLib('ENGINE_register_ECDH', false);
+     @ENGINE_unregister_ECDH:= LoadFunctionCLib('ENGINE_unregister_ECDH', false);
+     @ENGINE_register_all_ECDH:= LoadFunctionCLib('ENGINE_register_all_ECDH', false);
+     @ENGINE_register_ECDSA:= LoadFunctionCLib('ENGINE_register_ECDSA', false);
+     @ENGINE_unregister_ECDSA:= LoadFunctionCLib('ENGINE_unregister_ECDSA', false);
+     @ENGINE_register_all_ECDSA:= LoadFunctionCLib('ENGINE_register_all_ECDSA', false);
      @ENGINE_register_DH:= LoadFunctionCLib('ENGINE_register_DH');
      @ENGINE_unregister_DH:= LoadFunctionCLib('ENGINE_unregister_DH');
      @ENGINE_register_all_DH:= LoadFunctionCLib('ENGINE_register_all_DH');
      @ENGINE_register_RAND:= LoadFunctionCLib('ENGINE_register_RAND');
      @ENGINE_unregister_RAND:= LoadFunctionCLib('ENGINE_unregister_RAND');
      @ENGINE_register_all_RAND:= LoadFunctionCLib('ENGINE_register_all_RAND');
-     @ENGINE_register_STORE:= LoadFunctionCLib('ENGINE_register_STORE');
-     @ENGINE_unregister_STORE:= LoadFunctionCLib('ENGINE_unregister_STORE');
-     @ENGINE_register_all_STORE:= LoadFunctionCLib('ENGINE_register_all_STORE');
+     @ENGINE_register_STORE:= LoadFunctionCLib('ENGINE_register_STORE', false);
+     @ENGINE_unregister_STORE:= LoadFunctionCLib('ENGINE_unregister_STORE', false);
+     @ENGINE_register_all_STORE:= LoadFunctionCLib('ENGINE_register_all_STORE', false);
      @ENGINE_register_ciphers:= LoadFunctionCLib('ENGINE_register_ciphers');
      @ENGINE_unregister_ciphers:= LoadFunctionCLib('ENGINE_unregister_ciphers');
      @ENGINE_register_all_ciphers:= LoadFunctionCLib('ENGINE_register_all_ciphers');
@@ -254,11 +254,11 @@ begin
      @ENGINE_set_name:= LoadFunctionCLib('ENGINE_set_name');
      @ENGINE_set_RSA:= LoadFunctionCLib('ENGINE_set_RSA');
      @ENGINE_set_DSA:= LoadFunctionCLib('ENGINE_set_DSA');
-     @ENGINE_set_ECDH:= LoadFunctionCLib('ENGINE_set_ECDH');
-     @ENGINE_set_ECDSA:= LoadFunctionCLib('ENGINE_set_ECDSA');
+     @ENGINE_set_ECDH:= LoadFunctionCLib('ENGINE_set_ECDH', false);
+     @ENGINE_set_ECDSA:= LoadFunctionCLib('ENGINE_set_ECDSA', false);
      @ENGINE_set_DH:= LoadFunctionCLib('ENGINE_set_DH');
      @ENGINE_set_RAND:= LoadFunctionCLib('ENGINE_set_RAND');
-     @ENGINE_set_STORE:= LoadFunctionCLib('ENGINE_set_STORE');
+     @ENGINE_set_STORE:= LoadFunctionCLib('ENGINE_set_STORE', false);
      @ENGINE_set_destroy_function:= LoadFunctionCLib('ENGINE_set_destroy_function');
      @ENGINE_set_init_function:= LoadFunctionCLib('ENGINE_set_init_function');
      @ENGINE_set_finish_function:= LoadFunctionCLib('ENGINE_set_finish_function');
@@ -272,7 +272,7 @@ begin
      @ENGINE_set_pkey_asn1_meths:= LoadFunctionCLib('ENGINE_set_pkey_asn1_meths');
      @ENGINE_set_flags:= LoadFunctionCLib('ENGINE_set_flags');
      @ENGINE_set_cmd_defns:= LoadFunctionCLib('ENGINE_set_cmd_defns');
-     @ENGINE_get_ex_new_index:= LoadFunctionCLib('ENGINE_get_ex_new_index');
+     @ENGINE_get_ex_new_index:= LoadFunctionCLib('ENGINE_get_ex_new_index', false);
      @ENGINE_set_ex_data:= LoadFunctionCLib('ENGINE_set_ex_data');
      @ENGINE_get_ex_data:= LoadFunctionCLib('ENGINE_get_ex_data');
      @ENGINE_add_conf_module := LoadFunctionCLib('ENGINE_add_conf_module');
@@ -284,30 +284,30 @@ begin
 
      @ENGINE_get_pkey_asn1_meth_str := LoadFunctionCLib('ENGINE_get_pkey_asn1_meth_str');
           
-	   @ENGINE_cleanup:= LoadFunctionCLib('ENGINE_cleanup');
+     @ENGINE_cleanup:= LoadFunctionCLib('ENGINE_cleanup', false);
      @ENGINE_get_id:= LoadFunctionCLib('ENGINE_get_id');
      @ENGINE_get_name:= LoadFunctionCLib('ENGINE_get_name');
      @ENGINE_get_RSA:= LoadFunctionCLib('ENGINE_get_RSA');
      @ENGINE_get_DSA:= LoadFunctionCLib('ENGINE_get_DSA');
-     @ENGINE_get_ECDH:= LoadFunctionCLib('ENGINE_get_ECDH');
-     @ENGINE_get_ECDSA:= LoadFunctionCLib('ENGINE_get_ECDSA');
+     @ENGINE_get_ECDH:= LoadFunctionCLib('ENGINE_get_ECDH', false);
+     @ENGINE_get_ECDSA:= LoadFunctionCLib('ENGINE_get_ECDSA', false);
      @ENGINE_get_DH:= LoadFunctionCLib('ENGINE_get_DH');
      @ENGINE_get_RAND:= LoadFunctionCLib('ENGINE_get_RAND');
-     @ENGINE_get_STORE:= LoadFunctionCLib('ENGINE_get_STORE');
+     @ENGINE_get_STORE:= LoadFunctionCLib('ENGINE_get_STORE', false);
      @ENGINE_get_destroy_function:= LoadFunctionCLib('ENGINE_get_destroy_function');
-	   @ENGINE_get_init_function:= LoadFunctionCLib('ENGINE_get_init_function');
-	   @ENGINE_get_finish_function:= LoadFunctionCLib('ENGINE_get_finish_function');
-	   @ENGINE_get_ctrl_function:= LoadFunctionCLib('ENGINE_get_ctrl_function');
-	   @ENGINE_get_load_privkey_function:= LoadFunctionCLib('ENGINE_get_load_privkey_function');
-	   @ENGINE_get_load_pubkey_function:= LoadFunctionCLib('ENGINE_get_load_pubkey_function');
-	   @ENGINE_get_ssl_client_cert_function:= LoadFunctionCLib('ENGINE_get_ssl_client_cert_function');
-	   @ENGINE_get_ciphers:= LoadFunctionCLib('ENGINE_get_ciphers');
-	   @ENGINE_get_digests:= LoadFunctionCLib('ENGINE_get_digests');
-	   @ENGINE_get_pkey_meths:= LoadFunctionCLib('ENGINE_get_pkey_meths');
-	   @ENGINE_get_pkey_asn1_meths:= LoadFunctionCLib('ENGINE_get_pkey_asn1_meths');
-	   @ENGINE_get_cipher:= LoadFunctionCLib('ENGINE_get_cipher');
-	   @ENGINE_get_digest:= LoadFunctionCLib('ENGINE_get_digest');
-	   @ENGINE_get_pkey_meth:= LoadFunctionCLib('ENGINE_get_pkey_meth');
+     @ENGINE_get_init_function:= LoadFunctionCLib('ENGINE_get_init_function');
+     @ENGINE_get_finish_function:= LoadFunctionCLib('ENGINE_get_finish_function');
+     @ENGINE_get_ctrl_function:= LoadFunctionCLib('ENGINE_get_ctrl_function');
+     @ENGINE_get_load_privkey_function:= LoadFunctionCLib('ENGINE_get_load_privkey_function');
+     @ENGINE_get_load_pubkey_function:= LoadFunctionCLib('ENGINE_get_load_pubkey_function');
+     @ENGINE_get_ssl_client_cert_function:= LoadFunctionCLib('ENGINE_get_ssl_client_cert_function');
+     @ENGINE_get_ciphers:= LoadFunctionCLib('ENGINE_get_ciphers');
+     @ENGINE_get_digests:= LoadFunctionCLib('ENGINE_get_digests');
+     @ENGINE_get_pkey_meths:= LoadFunctionCLib('ENGINE_get_pkey_meths');
+     @ENGINE_get_pkey_asn1_meths:= LoadFunctionCLib('ENGINE_get_pkey_asn1_meths');
+     @ENGINE_get_cipher:= LoadFunctionCLib('ENGINE_get_cipher');
+     @ENGINE_get_digest:= LoadFunctionCLib('ENGINE_get_digest');
+     @ENGINE_get_pkey_meth:= LoadFunctionCLib('ENGINE_get_pkey_meth');
 	   @ENGINE_get_pkey_asn1_meth:= LoadFunctionCLib('ENGINE_get_pkey_asn1_meth');
 	   @ENGINE_get_cmd_defns:= LoadFunctionCLib('ENGINE_get_cmd_defns');
 	   @ENGINE_get_flags:= LoadFunctionCLib('ENGINE_get_flags');
@@ -318,8 +318,8 @@ begin
 	   @ENGINE_load_ssl_client_cert:= LoadFunctionCLib('ENGINE_load_ssl_client_cert');
 	   @ENGINE_get_default_RSA:= LoadFunctionCLib('ENGINE_get_default_RSA');
 	   @ENGINE_get_default_DSA:= LoadFunctionCLib('ENGINE_get_default_DSA');
-	   @ENGINE_get_default_ECDH:= LoadFunctionCLib('ENGINE_get_default_ECDH');
-	   @ENGINE_get_default_ECDSA:= LoadFunctionCLib('ENGINE_get_default_ECDSA');
+	   @ENGINE_get_default_ECDH:= LoadFunctionCLib('ENGINE_get_default_ECDH', false);
+	   @ENGINE_get_default_ECDSA:= LoadFunctionCLib('ENGINE_get_default_ECDSA', false);
 	   @ENGINE_get_default_DH:= LoadFunctionCLib('ENGINE_get_default_DH');
 	   @ENGINE_get_default_RAND:= LoadFunctionCLib('ENGINE_get_default_RAND');
 	   @ENGINE_get_cipher_engine:= LoadFunctionCLib('ENGINE_get_cipher_engine');
@@ -329,8 +329,8 @@ begin
 	   @ENGINE_set_default_RSA:= LoadFunctionCLib('ENGINE_set_default_RSA');
 	   @ENGINE_set_default_string:= LoadFunctionCLib('ENGINE_set_default_string');
 	   @ENGINE_set_default_DSA:= LoadFunctionCLib('ENGINE_set_default_DSA');
-	   @ENGINE_set_default_ECDH:= LoadFunctionCLib('ENGINE_set_default_ECDH');
-	   @ENGINE_set_default_ECDSA:= LoadFunctionCLib('ENGINE_set_default_ECDSA');
+	   @ENGINE_set_default_ECDH:= LoadFunctionCLib('ENGINE_set_default_ECDH', false);
+	   @ENGINE_set_default_ECDSA:= LoadFunctionCLib('ENGINE_set_default_ECDSA', false);
 	   @ENGINE_set_default_DH:= LoadFunctionCLib('ENGINE_set_default_DH');
 	   @ENGINE_set_default_RAND:= LoadFunctionCLib('ENGINE_set_default_RAND');
 	   @ENGINE_set_default_ciphers:= LoadFunctionCLib('ENGINE_set_default_ciphers');
@@ -340,9 +340,7 @@ begin
 	   @ENGINE_set_default:= LoadFunctionCLib('ENGINE_set_default');
 	   @ENGINE_get_static_state:= LoadFunctionCLib('ENGINE_get_static_state');
 	   @ERR_load_ENGINE_strings:= LoadFunctionCLib('ERR_load_ENGINE_strings');
-
-
   end;
 
 end;
-end.
+end.

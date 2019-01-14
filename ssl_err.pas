@@ -19,14 +19,14 @@ var
     ERR_set_error_data: procedure( _data: PAnsiChar;_flags: TC_INT); cdecl = nil;
 
     ERR_get_error: function: TC_ULONG; cdecl = nil;
-    ERR_get_error_line: function(_file: PPAnsiChar;var _line: TC_INT): TC_ULONG; cdecl = nil;
-    ERR_get_error_line_data: function(_file: PPAnsiChar;var _line: TC_INT; _data: PPAnsiChar; var _flags: TC_INT): TC_ULONG; cdecl = nil;
+    ERR_get_error_line: function(var _file: PAnsiChar;var _line: TC_INT): TC_ULONG; cdecl = nil;
+    ERR_get_error_line_data: function(var _file: PAnsiChar;var _line: TC_INT; var _data: PAnsiChar; var _flags: TC_INT): TC_ULONG; cdecl = nil;
     ERR_peek_error: function: TC_ULONG; cdecl = nil;
-    ERR_peek_error_line: function(_file: PPAnsiChar;var _line: TC_INT): TC_ULONG; cdecl = nil;
-    ERR_peek_error_line_data: function(_file: PPAnsiChar;var _line: TC_INT; _data: PPAnsiChar;var _flags: TC_INT): TC_ULONG; cdecl = nil;
+    ERR_peek_error_line: function(var _file: PAnsiChar;var _line: TC_INT): TC_ULONG; cdecl = nil;
+    ERR_peek_error_line_data: function(var _file: PAnsiChar;var _line: TC_INT; var _data: PAnsiChar;var _flags: TC_INT): TC_ULONG; cdecl = nil;
     ERR_peek_last_error: function: TC_ULONG; cdecl = nil;
-    ERR_peek_last_error_line: function(_file: PPAnsiChar; var _line: TC_INT): TC_ULONG; cdecl = nil;
-    ERR_peek_last_error_line_data: function(_file: PPAnsiChar;var _line: TC_INT; _data: PPAnsiChar; _flags: TC_INT): TC_ULONG; cdecl = nil;
+    ERR_peek_last_error_line: function(var _file: PAnsiChar; var _line: TC_INT): TC_ULONG; cdecl = nil;
+    ERR_peek_last_error_line_data: function(var _file: PAnsiChar;var _line: TC_INT; var _data: PAnsiChar; _flags: TC_INT): TC_ULONG; cdecl = nil;
     ERR_clear_error: procedure; cdecl = nil;
     ERR_error_string: function(e: TC_ULONG; _buf: PAnsiChar): PAnsiChar; cdecl = nil;
     ERR_error_string_n: procedure(e: TC_ULONG;  _buf: PAnsiChar; len: TC_SIZE_T); cdecl = nil;
@@ -52,6 +52,8 @@ var
     ERR_get_implementation: function: PERR_FNS; cdecl = nil;
     ERR_set_implementation: function(const fns: PERR_FNS): TC_INT; cdecl = nil;
 
+
+
 type
   ESSLError = class(Exception)
   public
@@ -61,7 +63,9 @@ type
     constructor Create(AErrorCode: TC_ULONG); overload;
   end;
 
-procedure SSL_InitERR;    
+procedure SSL_InitERR;
+
+function ERR_GetFullErrorString: String;
 
 function SSL_CheckError(AShowException: Boolean = True): TC_ULONG;
 
@@ -101,19 +105,49 @@ begin
        @ERR_print_errors_cb:= LoadFunctionCLib('ERR_print_errors_cb');
        @ERR_print_errors:= LoadFunctionCLib('ERR_print_errors');
        @ERR_load_ERR_strings:= LoadFunctionCLib('ERR_load_ERR_strings');
-       @ERR_load_crypto_strings:= LoadFunctionCLib('ERR_load_crypto_strings');
-       @ERR_free_strings:= LoadFunctionCLib('ERR_free_strings');
+       @ERR_load_crypto_strings:= LoadFunctionCLib('ERR_load_crypto_strings', false);
+       @ERR_free_strings:= LoadFunctionCLib('ERR_free_strings', false);
        @ERR_remove_thread_state:= LoadFunctionCLib('ERR_remove_thread_state', false);
        @ERR_remove_state:= LoadFunctionCLib('ERR_remove_state');
        @ERR_get_state:= LoadFunctionCLib('ERR_get_state');
        @ERR_get_next_error_library:= LoadFunctionCLib('ERR_get_next_error_library');
        @ERR_set_mark:= LoadFunctionCLib('ERR_set_mark');
        @ERR_pop_to_mark:= LoadFunctionCLib('ERR_pop_to_mark');
-       @ERR_get_implementation:= LoadFunctionCLib('ERR_get_implementation');
-       @ERR_set_implementation:= LoadFunctionCLib('ERR_set_implementation');
-       ERR_load_crypto_strings;
+       @ERR_get_implementation:= LoadFunctionCLib('ERR_get_implementation', false);
+       @ERR_set_implementation:= LoadFunctionCLib('ERR_set_implementation', false);
+
+       if Assigned(ERR_load_crypto_strings) then
+         ERR_load_crypto_strings();
     end;
 end;
+
+function ERR_GetFullErrorString: String;
+var Err: TC_ULONG;
+    LLine, LFlags: TC_ULONG;
+    LFile, LData: PAnsiChar;
+    Buf: String;
+begin
+
+  Result := '';
+  if not Assigned(ERR_get_error_line_data) then
+   Exit;
+
+  SetLength(Buf, 256);
+  Result := '';
+  repeat
+    //LFile:= Getmem(1024);
+    //LData:= Getmem(1024);
+    Err := ERR_get_error_line_data(LFile, LLine, LData, LFlags);
+    if Err <> 0 then
+      begin
+        Buf := ERR_error_string(Err, nil);
+        Result := Result + Buf + ':'+ LFile+':'+LLine.ToString+':'+LData+':'+LFlags.ToString+#13#10;
+      end;
+    //FreeMem(LFile);
+    //FreeMem(LData);
+  until Err = 0;
+end;
+
 
 
 { ESSLError }
@@ -132,4 +166,4 @@ begin
  Create(AErrorCode, sMsg);
 end;
 
-end.
+end.
