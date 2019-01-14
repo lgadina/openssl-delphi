@@ -183,8 +183,8 @@ begin
     @RSA_get_default_method:= LoadFunctionCLib('RSA_get_default_method');
     @RSA_get_method:= LoadFunctionCLib('RSA_get_method');
     @RSA_set_method:= LoadFunctionCLib('RSA_set_method');
-    @RSA_memory_lock:= LoadFunctionCLib('RSA_memory_lock');
-    @RSA_PKCS1_SSLeay:= LoadFunctionCLib('RSA_PKCS1_SSLeay');
+    @RSA_memory_lock:= LoadFunctionCLib('RSA_memory_lock', false);
+    @RSA_PKCS1_SSLeay:= LoadFunctionCLib('RSA_PKCS1_SSLeay', false);
     @RSA_null_method:= LoadFunctionCLib('RSA_null_method');
     @RSA_PSS_PARAMS_new:= LoadFunctionCLib('RSA_PSS_PARAMS_new');
     @RSA_PSS_PARAMS_free:= LoadFunctionCLib('RSA_PSS_PARAMS_free');
@@ -192,10 +192,10 @@ begin
     @i2d_RSA_PSS_PARAMS:= LoadFunctionCLib('i2d_RSA_PSS_PARAMS');
     @RSA_PSS_PARAMS_it:= LoadFunctionCLib('RSA_PSS_PARAMS_it');
     @RSA_print:= LoadFunctionCLib('RSA_print');
-    @i2d_RSA_NET:= LoadFunctionCLib('i2d_RSA_NET');
-    @d2i_RSA_NET:= LoadFunctionCLib('d2i_RSA_NET');
-    @i2d_Netscape_RSA:= LoadFunctionCLib('i2d_Netscape_RSA');
-    @d2i_Netscape_RSA:= LoadFunctionCLib('d2i_Netscape_RSA');
+    @i2d_RSA_NET:= LoadFunctionCLib('i2d_RSA_NET', false);
+    @d2i_RSA_NET:= LoadFunctionCLib('d2i_RSA_NET', false);
+    @i2d_Netscape_RSA:= LoadFunctionCLib('i2d_Netscape_RSA', false);
+    @d2i_Netscape_RSA:= LoadFunctionCLib('d2i_Netscape_RSA', false);
     @RSA_sign:= LoadFunctionCLib('RSA_sign');
     @RSA_verify:= LoadFunctionCLib('RSA_verify');
     @RSA_sign_ASN1_OCTET_STRING:= LoadFunctionCLib('RSA_sign_ASN1_OCTET_STRING');
@@ -221,7 +221,7 @@ begin
     @RSA_padding_add_PKCS1_PSS:= LoadFunctionCLib('RSA_padding_add_PKCS1_PSS');
     @RSA_verify_PKCS1_PSS_mgf1:= LoadFunctionCLib('RSA_verify_PKCS1_PSS_mgf1');
     @RSA_padding_add_PKCS1_PSS_mgf1:= LoadFunctionCLib('RSA_padding_add_PKCS1_PSS_mgf1');
-    @RSA_get_ex_new_index:= LoadFunctionCLib('RSA_get_ex_new_index');
+    @RSA_get_ex_new_index:= LoadFunctionCLib('RSA_get_ex_new_index', false);
     @RSA_set_ex_data:= LoadFunctionCLib('RSA_set_ex_data');
     @RSA_get_ex_data:= LoadFunctionCLib('RSA_get_ex_data');
     @RSAPublicKey_dup:= LoadFunctionCLib('RSAPublicKey_dup');

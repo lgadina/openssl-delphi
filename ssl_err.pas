@@ -20,7 +20,7 @@ var
 
     ERR_get_error: function: TC_ULONG; cdecl = nil;
     ERR_get_error_line: function(var _file: PAnsiChar;var _line: TC_INT): TC_ULONG; cdecl = nil;
-    ERR_get_error_line_data: function(var _file: PAnsiChar;var _line: TC_INT; var _data: PAnsiChar; var _flags: TC_INT): TC_ULONG; cdecl = nil;
+    ERR_get_error_line_data: function(var _file: PAnsiChar; var _line: TC_INT; var _data: PAnsiChar; var _flags: TC_INT): TC_ULONG; cdecl = nil;
     ERR_peek_error: function: TC_ULONG; cdecl = nil;
     ERR_peek_error_line: function(var _file: PAnsiChar;var _line: TC_INT): TC_ULONG; cdecl = nil;
     ERR_peek_error_line_data: function(var _file: PAnsiChar;var _line: TC_INT; var _data: PAnsiChar;var _flags: TC_INT): TC_ULONG; cdecl = nil;
@@ -123,7 +123,7 @@ end;
 
 function ERR_GetFullErrorString: String;
 var Err: TC_ULONG;
-    LLine, LFlags: TC_ULONG;
+    LLine, LFlags: TC_INT;
     LFile, LData: PAnsiChar;
     Buf: String;
 begin

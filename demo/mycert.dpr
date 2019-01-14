@@ -1,3 +1,6 @@
+// JCL_DEBUG_EXPERT_GENERATEJDBG OFF
+// JCL_DEBUG_EXPERT_INSERTJDBG OFF
+// JCL_DEBUG_EXPERT_DELETEMAPFILE OFF
 program mycert;
 
 {$APPTYPE CONSOLE}
@@ -15,6 +18,7 @@ uses
   ssl_err in '..\ssl_err.pas',
   ssl_asn in '..\ssl_asn.pas',
   ssl_bio in '..\ssl_bio.pas',
+  ssl_objects in '..\ssl_objects.pas',
   ssl_pem in '..\ssl_pem.pas';
 
 function add_ext(cert: PX509; nid: TC_INT; value: PAnsiChar): Boolean;
@@ -34,7 +38,7 @@ begin
 
 end;
 
-function _OnGetPassword(buf: PAnsiString; size: TC_INT; rwflag: TC_INT; userdata: pointer): integer; cdecl;
+function _OnGetPassword(buf: PAnsiChar; size: TC_INT; rwflag: TC_INT; userdata: pointer): integer; cdecl;
 var P: AnsiString;
 begin
 
@@ -71,6 +75,7 @@ end;
 procedure mkcert(var x509p: PX509; var pkeyp: PEVP_PKEY; bits: TC_INT; serial: TC_INT; days: TC_INT);
 var FRSA: PRSA;
    name: PX509_NAME;
+   tm: PASN1_TIME;
 begin
  if pkeyp = nil then
  begin
@@ -90,9 +95,12 @@ begin
   X509_set_version(x509p, 2);
   Writeln('Set certificate parameters');
   ASN1_INTEGER_set(X509_get_serialNumber(x509p), 1);
+  tm := ASN1_TIME_new;
+  ASN1_TIME_set(tm, 0);
+  X509_set_notBefore(x509p,tm);
 
-  X509_gmtime_adj(x509p.cert_info.validity.notBefore, 0);
-  X509_gmtime_adj(x509p.cert_info.validity.notAfter, 60*60*24*days);
+//  X509_gmtime_adj(x509p.cert_info.validity.notBefore, 0);
+//  X509_gmtime_adj(x509p.cert_info.validity.notAfter, 60*60*24*days);
   X509_set_pubkey(x509p, pkeyp);
   Name := X509_get_subject_name(x509p);
   X509_NAME_add_entry_by_txt(Name, 'C', MBSTRING_ASC, 'RU', -1, -1, 0);

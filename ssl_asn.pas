@@ -346,7 +346,7 @@ begin
       @ASN1_OBJECT_free:= LoadFunctionCLib('ASN1_OBJECT_free');
       @ASN1_OBJECT_create:= LoadFunctionCLib('ASN1_OBJECT_create');
       @i2d_ASN1_OBJECT:= LoadFunctionCLib('i2d_ASN1_OBJECT');
-      @c2i_ASN1_OBJECT:= LoadFunctionCLib('c2i_ASN1_OBJECT');
+      @c2i_ASN1_OBJECT:= LoadFunctionCLib('c2i_ASN1_OBJECT', false);
       @d2i_ASN1_OBJECT:= LoadFunctionCLib('d2i_ASN1_OBJECT');
       @ASN1_OBJECT_it:= LoadFunctionCLib('ASN1_OBJECT_it');
       @i2t_ASN1_OBJECT:= LoadFunctionCLib('i2t_ASN1_OBJECT');
@@ -399,7 +399,7 @@ begin
       @ASN1_BIT_STRING_it:= LoadFunctionCLib('ASN1_BIT_STRING_it');
       @i2d_ASN1_BIT_STRING:= LoadFunctionCLib('i2d_ASN1_BIT_STRING');
       @d2i_ASN1_BIT_STRING:= LoadFunctionCLib('d2i_ASN1_BIT_STRING');
-      @c2i_ASN1_BIT_STRING:= LoadFunctionCLib('c2i_ASN1_BIT_STRING');
+      @c2i_ASN1_BIT_STRING:= LoadFunctionCLib('c2i_ASN1_BIT_STRING', false);
 
       @ASN1_BMPSTRING_new:= LoadFunctionCLib('ASN1_BMPSTRING_new');
       @ASN1_BMPSTRING_free:= LoadFunctionCLib('ASN1_BMPSTRING_free');
@@ -407,8 +407,8 @@ begin
       @i2d_ASN1_BMPSTRING:= LoadFunctionCLib('i2d_ASN1_BMPSTRING');
       @d2i_ASN1_BMPSTRING:= LoadFunctionCLib('d2i_ASN1_BMPSTRING');
 
-      @i2d_ASN1_BOOLEAN:= LoadFunctionCLib('i2d_ASN1_BOOLEAN');
-      @d2i_ASN1_BOOLEAN:= LoadFunctionCLib('d2i_ASN1_BOOLEAN');
+      @i2d_ASN1_BOOLEAN:= LoadFunctionCLib('i2d_ASN1_BOOLEAN', false);
+      @d2i_ASN1_BOOLEAN:= LoadFunctionCLib('d2i_ASN1_BOOLEAN', false);
       @ASN1_BOOLEAN_it:= LoadFunctionCLib('ASN1_BOOLEAN_it');
       @ASN1_FBOOLEAN_it:= LoadFunctionCLib('ASN1_FBOOLEAN_it');
       @ASN1_TBOOLEAN_it:= LoadFunctionCLib('ASN1_TBOOLEAN_it');
@@ -435,8 +435,8 @@ begin
       @ASN1_INTEGER_it:= LoadFunctionCLib('ASN1_INTEGER_it');
       @ASN1_INTEGER_to_BN:= LoadFunctionCLib('ASN1_INTEGER_to_BN');
       @BN_to_ASN1_INTEGER:= LoadFunctionCLib('BN_to_ASN1_INTEGER');
-      @i2c_ASN1_INTEGER:= LoadFunctionCLib('i2c_ASN1_INTEGER');
-      @c2i_ASN1_INTEGER:= LoadFunctionCLib('c2i_ASN1_INTEGER');
+      @i2c_ASN1_INTEGER:= LoadFunctionCLib('i2c_ASN1_INTEGER', false);
+      @c2i_ASN1_INTEGER:= LoadFunctionCLib('c2i_ASN1_INTEGER', false);
       @d2i_ASN1_UINTEGER:= LoadFunctionCLib('d2i_ASN1_UINTEGER');
       @i2a_ASN1_INTEGER:= LoadFunctionCLib('i2a_ASN1_INTEGER');
       @a2i_ASN1_INTEGER:= LoadFunctionCLib('a2i_ASN1_INTEGER');
@@ -563,23 +563,23 @@ begin
       @ASN1_mbstring_copy:= LoadFunctionCLib('ASN1_mbstring_copy');
       @ASN1_mbstring_ncopy:= LoadFunctionCLib('ASN1_mbstring_ncopy');
       @ASN1_object_size:= LoadFunctionCLib('ASN1_object_size');
-      @ASN1_pack_string:= LoadFunctionCLib('ASN1_pack_string');
+      @ASN1_pack_string:= LoadFunctionCLib('ASN1_pack_string', false);
       @ASN1_parse:= LoadFunctionCLib('ASN1_parse');
       @ASN1_parse_dump:= LoadFunctionCLib('ASN1_parse_dump');
-      @ASN1_primitive_free:= LoadFunctionCLib('ASN1_primitive_free');
-      @ASN1_primitive_new:= LoadFunctionCLib('ASN1_primitive_new');
+      @ASN1_primitive_free:= LoadFunctionCLib('ASN1_primitive_free', false);
+      @ASN1_primitive_new:= LoadFunctionCLib('ASN1_primitive_new', false);
       @ASN1_put_eoc:= LoadFunctionCLib('ASN1_put_eoc');
       @ASN1_put_object:= LoadFunctionCLib('ASN1_put_object');
-      @ASN1_unpack_string:= LoadFunctionCLib('ASN1_unpack_string');
+      @ASN1_unpack_string:= LoadFunctionCLib('ASN1_unpack_string', false);
       @ASN1_verify:= LoadFunctionCLib('ASN1_verify');
       @ASN1_sign:= LoadFunctionCLib('ASN1_sign');
-      @ASN1_seq_pack:= LoadFunctionCLib('ASN1_seq_pack');
+      @ASN1_seq_pack:= LoadFunctionCLib('ASN1_seq_pack', false);
       @ASN1_tag2bit:= LoadFunctionCLib('ASN1_tag2bit');
       @ASN1_tag2str:= LoadFunctionCLib('ASN1_tag2str');
-      @ASN1_template_d2i:= LoadFunctionCLib('ASN1_template_d2i');
-      @ASN1_template_free:= LoadFunctionCLib('ASN1_template_free');
-      @ASN1_template_i2d:= LoadFunctionCLib('ASN1_template_i2d');
-      @ASN1_template_new:= LoadFunctionCLib('ASN1_template_new');
+      @ASN1_template_d2i:= LoadFunctionCLib('ASN1_template_d2i', false);
+      @ASN1_template_free:= LoadFunctionCLib('ASN1_template_free', false);
+      @ASN1_template_i2d:= LoadFunctionCLib('ASN1_template_i2d', false);
+      @ASN1_template_new:= LoadFunctionCLib('ASN1_template_new', false);
 
       @ASN1_d2i_bio:= LoadFunctionCLib('ASN1_d2i_bio');
       @ASN1_d2i_fp:= LoadFunctionCLib('ASN1_d2i_fp');

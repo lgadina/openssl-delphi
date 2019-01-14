@@ -6,11 +6,9 @@ var
   SSL_C_LIB : AnsiString = 'libcrypto';
 {$IFDEF UNIX}
   SSL_C_EXTENSION : AnsiString = '.so';
-   //'libeay32.so';
 {$ELSE}
-  //SSL_C_LIB : AnsiString = 'libeay32.dll';
   {$IfDef CPU386}
-   SSL_C_EXTENSION : AnsiString = '.dll';
+    SSL_C_EXTENSION : AnsiString = '.dll';
   {$Else}
     SSL_C_EXTENSION : AnsiString = '.x64.dll';
   {$EndIf}
@@ -83,7 +81,11 @@ begin
       end;
     end;
   end else
+  {$IFDEF FPC}
     raise Exception.CreateFmt('Error loading library. Not found '+SSL_C_LIB+SSL_C_EXTENSION, [FceName, SysErrorMessage(GetLastOSError)]);
+  {$ELSE}
+    raise Exception.CreateFmt('Error loading library. Not found '+SSL_C_LIB+SSL_C_EXTENSION, [FceName, SysErrorMessage(GetLastError)]);
+   {$ENDIF}
 end;
 
 initialization
